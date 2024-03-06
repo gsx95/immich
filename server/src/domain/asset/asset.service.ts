@@ -188,11 +188,12 @@ export class AssetService {
   }
 
   async getMemoryLane(auth: AuthDto, dto: MemoryLaneDto): Promise<MemoryLaneResponseDto[]> {
-    const currentYear = new Date().getFullYear();
-    const assets = await this.assetRepository.getByDayOfYear(auth.user.id, dto);
+    const currentYear = new Date().getFullYear();const assets = await this.assetRepository.getByDayOfYear(auth.user.id, dto);
+
 
     return _.chain(assets)
       .filter((asset) => asset.localDateTime.getFullYear() < currentYear)
+      .filter((asset: AssetEntity) => asset.originalPath.toLowerCase().endsWith(".heic"))
       .map((asset) => {
         const years = currentYear - asset.localDateTime.getFullYear();
 
